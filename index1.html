@@ -1,0 +1,205 @@
+<html>
+   <head>
+       <title>Вывод списка объектов карты</title>
+       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+       <!--
+           Укажите свой API-ключ. Тестовый ключ НЕ БУДЕТ работать на других сайтах.
+           Получить ключ можно в Кабинете разработчика: https://developer.tech.yandex.ru/keys/
+       -->
+       <script src="https://unpkg.com/vue@3"></script>
+
+       <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=<ваш API-ключ>" type="text/javascript"></script>
+       <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
+       <script src="groups.js" type="text/javascript"></script>
+       <script src="object_list.js" type="text/javascript"></script>
+       <link rel="stylesheet" href="general style.css">
+       <style type="text/css">
+          .maindiv{
+             position: relative;
+             height: 700px;
+             aspect-ratio: 9 / 21;
+             border: 1px dotted black
+          }
+          .divForCategories{
+             width: 300px;
+             display: flex;
+             overflow-x: auto;
+             margin-bottom: 5px;
+          }
+          .divCategory{
+             width: fit-content;
+             height: fit-content;
+             border: 1px dotted black;
+             border-radius: 10px;
+             padding: 2px;
+          }
+          .children{
+             //overflow-y: auto;
+             width: auto;
+             box-sizing: border-box;
+             height: fit-content;
+
+             margin-top: 5px;
+          }
+          #app1{
+             background: rgb(240, 240, 240);
+             max-height: 650px;
+             height: 42px;
+             min-height: 42px;
+             width: 300;
+             //border: 1px solid red;
+             display: flex;
+             flex-direction: column;
+             align-items: start;
+             /* /overflow-y: hidden; */
+
+             position: absolute;
+             bottom: 0px;
+             //left: 500px;
+             overflow-y: hidden;
+          }
+          .children1{
+             max-width: 100%;
+             height: auto;
+             display: flex;
+             flex-direction: column;
+             border: 1px solid black;
+             border-radius: 10px;
+             padding-left: 10px;
+             font-size: 15px;
+          }
+          .spanCategory{
+             border: 1px solid green;
+             border-radius: 10px;
+             width: 100%;
+             max-width: 100%;
+             padding-left: 5px;
+             padding-right: 5px;
+          }
+          .divWithInfoCategory{
+             width: 100%;
+             //border: 1px solid blue;
+          }
+          #div1{
+             background: green;
+             height: 10px;
+             width: 30px;
+             border-radius: 2px;
+             align-self: center;
+             margin: 5px;
+          }
+          input{
+             width: 100%;;
+             border-radius: 10px;
+          }
+          .divForCategories, #div1{
+             flex-shrink: 0;
+          }
+          .conteinerForChilder{
+             position: relative;
+             overflow-y: auto;
+             overflow-x: hidden;
+             //max-height:100%;
+             flex-shrink: 2;
+             flex-grow: 0;
+          }
+          .active {
+             color: red;
+          }
+       </style>
+       <script type="text/javascript">
+          function f_inputOnFocus(){
+             let elParent = document.querySelector("#app1");
+             elParent.style.height=parseInt(window.getComputedStyle(elParent).getPropertyValue('max-height'))+"px";
+          }
+       </script>
+
+   </head>
+
+   <body>
+
+
+      <div class="mainDiv">
+         <div id="map"></div>
+
+      <div id="app1" >
+         <div id="div1">
+         </div>
+         <div style="position: relative; width: 100%; height: fit-content; padding-left:5px; padding-right: 5px; box-sizing: border-box; margin-bottom:5px;">
+            <input type="text" placeholder="Введите название" onfocus="f_inputOnFocus()" id="input1">
+         </div>
+
+         <div class="divForCategories"  :active="activeElem === elem">
+            <div class="divCategory" v-for="item of categories"     :key="item._id" @click="selectItem(item._id)" :class="{ selected: item._id === selectedItem, 'active': item._id === selectedItem }">
+                  <span>{{item.name}}</span>
+            </div>
+         </div>
+         <div class="conteinerForChilder" style="width: 100%; height: fit-content;">
+            <div class="children" v-for="item of publishedBooksMessage">
+
+               <div class="divWithInfoCategory">
+                  <span class="spanCategory" v-show="boolShowGroup">Группа: {{item.name}}</span>
+                  <div class="children1" v-for="item1 of item.items">
+
+                        <span class="spanName">Имя: {{item1.name}}</span>
+                        <span class="spanCoordinates">Координаты: {{item1.center}}</span>
+
+                  </div>
+               </div>
+            </div>
+         </div>
+
+      </div>
+
+      </div>
+
+
+      <script>
+         var app = {
+            data(){
+               return{
+                  data1: [
+                     {
+                        image:"https://avatars.mds.yandex.net/i?id=734e21d97e7db604aeaebe4293e8f8dea023dc91-4271045-images-thumbs&n=13",
+                        name:"имя 1",
+                        price:"1р"
+                     },
+                     {
+                        image:"https://klike.net/uploads/posts/2019-11/1574605248_9.jpg",
+                        name:"имя 2",
+                        price:"2р"
+                     },
+                  ],
+                  data2: groups,
+                  categories: [{name: "Все", _id:1},{name: "Памятники", _id:2},{name: "Покушайки", _id:3}, {name: "Музеи", _id:4}, {name: "Места", _id:5}],
+                  //style1:{active: isActive;}
+                  selectedItem: 1,
+                  boolShowGroup: true
+               }
+            },
+            methods: {
+                selectItem(item) {
+                    this.selectedItem= item
+                }
+            },
+            computed: {
+               publishedBooksMessage() {
+                  if (this.selectedItem == 1) {
+                     this.boolShowGroup = true;
+                     return this.data2;
+                  }
+                  else {
+                     this.boolShowGroup = false;
+                     return this.data2.filter(item=> item._id+1 == this.selectedItem);
+                  }
+               }
+            }
+         }
+         Vue.createApp(app).mount("#app1")
+      </script>
+
+      <script src="script resize div1.js">
+      </script>
+   </body>
+
+</html>
