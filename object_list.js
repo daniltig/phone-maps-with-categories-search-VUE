@@ -4,10 +4,10 @@ function init() {
 
     // Создание экземпляра карты.
     var myMap = new ymaps.Map('map', {
-            center: [50.443705, 30.530946],
+            center: [59.222245, 39.889046],
             zoom: 14
         }, {
-            searchControlProvider: 'yandex#search'
+            //searchControlProvider: 'yandex#search'
         }),
         // Контейнер для меню.
         menu = $('<ul class="menu"/>');

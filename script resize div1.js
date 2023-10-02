@@ -13,9 +13,10 @@ function f_BodyOnLoad() {
       elParent.style.height = elParentOffsetBottom  - (event.clientY-el.offsetTop - kursOnEl)+"px";
 
 
-      const styles = window.getComputedStyle(elParent); // получаем все стили элемента
-      const maxHeight = window.getComputedStyle(elParent).getPropertyValue('max-height');
-      console.log(window.getComputedStyle(elParent).getPropertyValue('max-height'));
+      //const styles = window.getComputedStyle(elParent); // получаем все стили элемента
+      const maxHeight = window.getComputedStyle(elParent).getPropertyValue('max-height').replace('%','')/100*elParent.parentElement.offsetHeight;
+      console.log(maxHeight);
+
    }
 
    let handlerUp = function(event, ){
@@ -24,15 +25,19 @@ function f_BodyOnLoad() {
       console.log("MouseUp");
 
       document.querySelector("#input1").blur();
+
+
       (function setHeight(){
-         if (elParent.offsetHeight<parseInt(window.getComputedStyle(elParent).getPropertyValue('max-height'))/4){
+         const maxHeight = window.getComputedStyle(elParent).getPropertyValue('max-height').replace('%','')/100*elParent.parentElement.offsetHeight;
+
+         if (elParent.offsetHeight<parseInt(maxHeight)/4){
             elParent.style.height=elParent.style.minHeight;
          }
-         else if (parseInt(window.getComputedStyle(elParent).getPropertyValue('max-height'))/4<=elParent.offsetHeight && elParent.offsetHeight<parseInt(window.getComputedStyle(elParent).getPropertyValue('max-height'))/1.25){
-            elParent.style.height=parseInt(window.getComputedStyle(elParent).getPropertyValue('max-height'))/2+"px";
+         else if (parseInt(maxHeight)/4<=elParent.offsetHeight && elParent.offsetHeight<parseInt(maxHeight)/1.25){
+            elParent.style.height=parseInt(maxHeight)/2+"px";
          }
-         else if (parseInt(window.getComputedStyle(elParent).getPropertyValue('max-height'))/1.25<=elParent.offsetHeight){
-            elParent.style.height=parseInt(window.getComputedStyle(elParent).getPropertyValue('max-height'))+"px";
+         else if (parseInt(maxHeight)/1.25<=elParent.offsetHeight){
+            elParent.style.height=parseInt(maxHeight)+"px";
          }
       })()
       document.removeEventListener( "mouseup" , handlerUp, false);
@@ -62,10 +67,6 @@ function f_BodyOnLoad() {
       let elParentOffsetBottom = (elParent.offsetTop+ elParent.offsetHeight);
       elParent.style.height = elParentOffsetBottom  - (event.clientY-el.offsetTop - kursOnEl)+"px";
 
-
-      const styles = window.getComputedStyle(elParent); // получаем все стили элемента
-      const maxHeight = window.getComputedStyle(elParent).getPropertyValue('max-height');
-      console.log(window.getComputedStyle(elParent).getPropertyValue('max-height'));
    }
 
    let handlerUpTouch = function(_event, ){
@@ -77,14 +78,16 @@ function f_BodyOnLoad() {
 
       document.querySelector("#input1").blur();
       (function setHeight(){
-         if (elParent.offsetHeight<parseInt(window.getComputedStyle(elParent).getPropertyValue('max-height'))/4){
+         const maxHeight = window.getComputedStyle(elParent).getPropertyValue('max-height').replace('%','')/100*elParent.parentElement.offsetHeight;
+
+         if (elParent.offsetHeight<parseInt(maxHeight)/4){
             elParent.style.height=elParent.style.minHeight;
          }
-         else if (parseInt(window.getComputedStyle(elParent).getPropertyValue('max-height'))/4<=elParent.offsetHeight && elParent.offsetHeight<parseInt(window.getComputedStyle(elParent).getPropertyValue('max-height'))/1.25){
-            elParent.style.height=parseInt(window.getComputedStyle(elParent).getPropertyValue('max-height'))/2+"px";
+         else if (parseInt(maxHeight)/4<=elParent.offsetHeight && elParent.offsetHeight<parseInt(maxHeight)/1.25){
+            elParent.style.height=parseInt(maxHeight)/2+"px";
          }
-         else if (parseInt(window.getComputedStyle(elParent).getPropertyValue('max-height'))/1.25<=elParent.offsetHeight){
-            elParent.style.height=parseInt(window.getComputedStyle(elParent).getPropertyValue('max-height'))+"px";
+         else if (parseInt(maxHeight)/1.25<=elParent.offsetHeight){
+            elParent.style.height=parseInt(maxHeight)+"px";
          }
       })()
       document.removeEventListener( "touchend" , handlerUpTouch, false);

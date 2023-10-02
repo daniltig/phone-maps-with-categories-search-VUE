@@ -21,7 +21,7 @@
              border: 1px dotted black
           }
           .divForCategories{
-             width: 300px;
+             width: 100%;
              display: flex;
              overflow-x: auto;
              margin-bottom: 5px;
@@ -43,10 +43,10 @@
           }
           #app1{
              background: rgb(240, 240, 240);
-             max-height: 650px;
+             max-height: 93%;
              height: 42px;
              min-height: 42px;
-             width: 300;
+             width: 100%;
              //border: 1px solid red;
              display: flex;
              flex-direction: column;
@@ -110,7 +110,7 @@
        <script type="text/javascript">
           function f_inputOnFocus(){
              let elParent = document.querySelector("#app1");
-             elParent.style.height=parseInt(window.getComputedStyle(elParent).getPropertyValue('max-height'))+"px";
+             elParent.style.height=parseInt(window.getComputedStyle(elParent).getPropertyValue('max-height').replace('%','')/100*elParent.parentElement.offsetHeight)+"px";
           }
        </script>
 
@@ -122,34 +122,34 @@
       <div class="mainDiv">
          <div id="map"></div>
 
-      <div id="app1" >
-         <div id="div1">
-         </div>
-         <div style="position: relative; width: 100%; height: fit-content; padding-left:5px; padding-right: 5px; box-sizing: border-box; margin-bottom:5px;">
-            <input type="text" placeholder="Введите название" onfocus="f_inputOnFocus()" id="input1">
-         </div>
-
-         <div class="divForCategories"  :active="activeElem === elem">
-            <div class="divCategory" v-for="item of categories"     :key="item._id" @click="selectItem(item._id)" :class="{ selected: item._id === selectedItem, 'active': item._id === selectedItem }">
-                  <span>{{item.name}}</span>
+         <div id="app1" >
+            <div id="div1">
             </div>
-         </div>
-         <div class="conteinerForChilder" style="width: 100%; height: fit-content;">
-            <div class="children" v-for="item of publishedBooksMessage">
+            <div style="position: relative; width: 100%; height: fit-content; padding-left:5px; padding-right: 5px; box-sizing: border-box; margin-bottom:5px;">
+               <input type="text" placeholder="Введите название" onfocus="f_inputOnFocus()" id="input1">
+            </div>
 
-               <div class="divWithInfoCategory">
-                  <span class="spanCategory" v-show="boolShowGroup">Группа: {{item.name}}</span>
-                  <div class="children1" v-for="item1 of item.items">
+            <div class="divForCategories"  :active="activeElem === elem">
+               <div class="divCategory" v-for="item of categories"     :key="item._id" @click="selectItem(item._id)" :class="{ selected: item._id === selectedItem, 'active': item._id === selectedItem }">
+                  <span>{{item.name}}</span>
+               </div>
+            </div>
+            <div class="conteinerForChilder" style="width: 100%; height: fit-content;">
+               <div class="children" v-for="item of publishedBooksMessage">
+
+                  <div class="divWithInfoCategory">
+                     <span class="spanCategory" v-show="boolShowGroup">Группа: {{item.name}}</span>
+                     <div class="children1" v-for="item1 of item.items">
 
                         <span class="spanName">Имя: {{item1.name}}</span>
                         <span class="spanCoordinates">Координаты: {{item1.center}}</span>
 
+                     </div>
                   </div>
                </div>
             </div>
-         </div>
 
-      </div>
+         </div>
 
       </div>
 
